@@ -4,7 +4,7 @@ import requests
 from datetime import datetime
 from decimal import Decimal
 from huey import crontab, RedisHuey
-from models import ExchangeRate
+from models import ExchangeRates
 from xml.etree import ElementTree
 
 huey = RedisHuey()
@@ -25,11 +25,13 @@ def update_rates():
     for date in dates:
 
         for currency in list(date):
-            er = ExchangeRate.get_or_create(
+            er = ExchangeRates.get_or_create(
                 source='ecb',
                 date=date.attrib['time'],
                 currency=currency.attrib['currency'],
-                rate=Decimal(currency.attrib['rate'])
+                defaults={
+                    'rate': Decimal(currency.attrib['rate'])
+                }
             )
             print(er)
 

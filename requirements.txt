@@ -4,5 +4,7 @@ huey
 meinheld
 peewee
 pendulum
+psycopg2cffi
+redis
 requests
 ujson

@@ -2,7 +2,7 @@ import ujson
 import pendulum
 
 import falcon
-from exchangerates.models import db, ExchangeRate
+from exchangerates.models import db, ExchangeRates
 
 
 class PeeweeConnectionMiddleware(object):
@@ -11,13 +11,13 @@ class PeeweeConnectionMiddleware(object):
 
     def process_response(self, req, resp, resource):
         if not db.is_closed():
-            db.close()
+           db.close()
 
 
 class ExchangeRateResource(object):
     def on_get(self, request, response, date=None):
         if date:
-            exchangerates = ExchangeRate.select().where(ExchangeRate.date == date)
+            exchangerates = ExchangeRates.select().where(ExchangeRates.date == date)
 
         response.body = ujson.dumps({
             'base': 'EUR',

@@ -1,4 +1,4 @@
-from exchangerates.models import db, ExchangeRate
+from exchangerates.models import db, ExchangeRates
 
 with db:
-  db.create_tables([ExchangeRate])
+  db.create_tables([ExchangeRates])
