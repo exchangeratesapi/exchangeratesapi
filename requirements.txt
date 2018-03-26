@@ -1,0 +1,8 @@
+cython
+gunicorn
+falcon
+huey
+pendulum
+requests
+ujson
+walrus
