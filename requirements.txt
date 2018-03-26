@@ -1,8 +1,8 @@
-cython
 gunicorn
 falcon
 huey
+meinheld
+peewee
 pendulum
 requests
 ujson
-walrus

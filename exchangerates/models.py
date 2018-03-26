@@ -1,12 +1,16 @@
-from walrus import Database, DateField, FloatField, Model, TextField, UUIDField
+from peewee import (
+    SqliteDatabase, Model, CharField, CompositeKey, DateField, DecimalField
+)
 
-db = Database()
+db = SqliteDatabase('exchangerates.db')
 
 
 class ExchangeRate(Model):
-    __database__ = db
-    # id = TextField(primary_key=True)
-    source = TextField(index=True)
+    source = CharField(choices=(('ecb', 'European Central Bank'),))
     date = DateField(index=True)
-    currency = TextField(index=True)
-    rate = FloatField()
+    currency = CharField()
+    rate = DecimalField()
+
+    class Meta:
+        database = db
+        primary_key = CompositeKey('date', 'currency')

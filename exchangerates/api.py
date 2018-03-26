@@ -1,27 +1,35 @@
-import json
+import ujson
 import pendulum
 
 import falcon
+from exchangerates.models import db, ExchangeRate
 
-from models import ExchangeRate
+
+class PeeweeConnectionMiddleware(object):
+    def process_request(self, req, resp):
+        db.connect()
+
+    def process_response(self, req, resp, resource):
+        if not db.is_closed():
+            db.close()
 
 
 class ExchangeRateResource(object):
     def on_get(self, request, response, date=None):
         if date:
-            exchangerates = ExchangeRate.query(
-                ExchangeRate.date == pendulum.parse(date, strict=True)
-            )
+            exchangerates = ExchangeRate.select().where(ExchangeRate.date == date)
 
-        response.body = json.dumps({
+        response.body = ujson.dumps({
             'base': 'EUR',
             'date': date,
-            'rates': {er.currency:er.rate for er in exchangerates}
+            'rates': {er.currency:str(er.rate) for er in exchangerates}
         })
 
 
 exchangerates = ExchangeRateResource()
 
-app = falcon.API()
+app = falcon.API(middleware=[
+    PeeweeConnectionMiddleware()
+])
 app.add_route('/latest/', exchangerates)
 app.add_route('/{date}/', exchangerates)

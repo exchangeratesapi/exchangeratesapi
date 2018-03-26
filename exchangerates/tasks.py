@@ -1,11 +1,11 @@
-import pendulum
+# import pendulum
 import requests
+
 from datetime import datetime
-from xml.etree import ElementTree
-
+from decimal import Decimal
 from huey import crontab, RedisHuey
-
 from models import ExchangeRate
+from xml.etree import ElementTree
 
 huey = RedisHuey()
 
@@ -25,12 +25,13 @@ def update_rates():
     for date in dates:
 
         for currency in list(date):
-            ExchangeRate.create(
+            er = ExchangeRate.get_or_create(
                 source='ecb',
-                date=pendulum.parse(date.attrib['time'], strict=True),
+                date=date.attrib['time'],
                 currency=currency.attrib['currency'],
-                rate=currency.attrib['rate']
+                rate=Decimal(currency.attrib['rate'])
             )
+            print(er)
 
 
 if __name__ == '__main__':
