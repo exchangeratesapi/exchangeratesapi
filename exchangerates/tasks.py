@@ -10,10 +10,13 @@ from xml.etree import ElementTree
 huey = RedisHuey()
 
 
-# @huey.periodic_task(crontab(minute='*'))
-@huey.task()
-def update_rates():
-    r = requests.get('https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml')
+HISTORY_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml'
+LAST_90_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml'
+
+
+@huey.periodic_task(crontab(minute='5', hour='*'))
+def update_rates(history=False):
+    r = requests.get(HISTORY_URL if history else LAST_90_URL)
     envelope = ElementTree.fromstring(r.content)
 
     namespaces = {
@@ -25,7 +28,7 @@ def update_rates():
     for date in dates:
 
         for currency in list(date):
-            er = ExchangeRates.get_or_create(
+            ExchangeRates.get_or_create(
                 source='ecb',
                 date=date.attrib['time'],
                 currency=currency.attrib['currency'],
@@ -33,8 +36,3 @@ def update_rates():
                     'rate': Decimal(currency.attrib['rate'])
                 }
             )
-            print(er)
-
-
-if __name__ == '__main__':
-    update_rates()
