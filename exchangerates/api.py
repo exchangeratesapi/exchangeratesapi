@@ -1,5 +1,8 @@
-import ujson
+from __future__ import division
+
 import pendulum
+import six
+import ujson
 
 import falcon
 from peewee import fn
@@ -41,27 +44,32 @@ class CORSMiddleware(object):
 
 class ExchangeRateResource(object):
     def on_get(self, request, response, date=None):
-        if date:
-            exchangerates = ExchangeRates.select().\
-                where(ExchangeRates.date == date).\
-                order_by(ExchangeRates.currency)
-        else:
-            ExchangeRatesAlias = ExchangeRates.alias()
-            subquery = ExchangeRatesAlias.select(fn.MAX(ExchangeRatesAlias.date))
-            exchangerates = ExchangeRates.select().\
-                where(ExchangeRates.date == subquery).\
-                order_by(ExchangeRates.currency)
-        
+        if not date:
+            # TODO: This can be cached to eliminate query
+            date = pendulum.Date.instance(
+                ExchangeRates.select(fn.MAX(ExchangeRates.date)).scalar(database=db)
+            ).to_date_string()
+
+        exchangerates = ExchangeRates.select(ExchangeRates.currency, ExchangeRates.rate).\
+            where(ExchangeRates.date == date).\
+            order_by(ExchangeRates.currency)
+
+        # Symbols
         if 'symbols' in request.params:
             exchangerates = exchangerates.where(ExchangeRates.currency << request.params['symbols'])
         
+        # Base
+        base = 'EUR'
+        rates = {er.currency:er.rate for er in exchangerates}
         if 'base' in request.params:
-            pass
+            base = request.params['base']
+            rates = {currency:rate / rates[base] for currency, rate in rates.iteritems()}
+            del rates[base]
 
         response.body = ujson.dumps({
-            'base': 'EUR',
+            'base': base,
             'date': date,
-            'rates': {er.currency:str(er.rate.normalize()) for er in exchangerates}
+            'rates': rates
         })
 
 
