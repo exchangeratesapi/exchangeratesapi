@@ -3,6 +3,7 @@ from __future__ import division
 import pendulum
 import six
 import ujson
+from decimal import Decimal, ROUND_HALF_UP
 
 import falcon
 from peewee import fn
@@ -64,7 +65,7 @@ class ExchangeRateResource(object):
         if 'base' in request.params:
             base = request.params['base']
             # TODO: For better performance this can probably be done within Postgres already
-            rates = {currency:round(rate / rates[base], 6) for currency, rate in rates.iteritems()}
+            rates = {currency:(rate / rates[base]).quantize(Decimal('0.0001'), ROUND_HALF_UP) for currency, rate in rates.iteritems()}
             del rates[base]
 
         response.body = ujson.dumps({
