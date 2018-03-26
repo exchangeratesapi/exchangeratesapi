@@ -63,7 +63,8 @@ class ExchangeRateResource(object):
         rates = {er.currency:er.rate for er in exchangerates}
         if 'base' in request.params:
             base = request.params['base']
-            rates = {currency:rate / rates[base] for currency, rate in rates.iteritems()}
+            # TODO: For better performance this can probably be done within Postgres already
+            rates = {currency:round(rate / rates[base], 6) for currency, rate in rates.iteritems()}
             del rates[base]
 
         response.body = ujson.dumps({
