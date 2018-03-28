@@ -1,0 +1,31 @@
+---
+project_name: exchangerates
+domains:
+  - exchangeratesapi.io
+  - www.exchangeratesapi.io
+
+# base path of installation
+install_path: /srv/
+
+# repository
+repository: git@github.com:madisvain/exchangeratesapi.git
+
+# public key for SSH access
+ssh_public_key: ~/.ssh/id_rsa.pub
+
+# database
+db_name: exchangerates
+
+# system packages
+system_packages:
+  - fail2ban
+  - gettext
+  - git
+  - nginx
+  - postgresql
+  - pypy
+  - python3-dev
+  - python3-pip
+  - python3-psycopg2
+  - python3-virtualenv
+  - ufw

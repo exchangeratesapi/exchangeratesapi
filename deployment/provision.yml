@@ -1,0 +1,49 @@
+---
+- hosts: servers
+  vars_files:
+    - vars.yml
+  gather_facts: false
+  remote_user: root
+
+  tasks:
+    - name: Install system packages
+      apt: pkg={{ item }} update-cache=yes state=present
+      with_items: "{{ system_packages }}"
+
+    - name: Create deploy user
+      user: name=deploy shell=/bin/bash append=yes groups=sudo
+    
+    - name: Authorize deploy user with public key
+      authorized_key:
+        user: deploy
+        state: present
+        key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+
+    - name: Create directory for app
+      file: path={{ install_path }}/{{ project_name }}/app
+            state=directory
+            owner=deploy
+            group=deploy
+    - name: Create directory for virtualenv
+      file: path={{ install_path }}/{{ project_name }}/env
+            state=directory
+            owner=deploy
+            group=deploy
+    - name: Create directory for logs
+      file: path={{ install_path }}/{{ project_name }}/logs
+            state=directory
+            owner=deploy
+            group=deploy
+
+    - name: Ensure the PostgreSQL service is running
+      service: name=postgresql state=started enabled=yes
+
+    - name: Create database
+      become: yes
+      become_user: postgres
+      postgresql_db: name={{ db_name }} state=present
+
+    - name: Remove default nginx site
+      file: path=/etc/nginx/sites-enabled/default state=absent
+
+- import_playbook: deploy.yml

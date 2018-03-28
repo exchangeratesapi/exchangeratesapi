@@ -1,0 +1,58 @@
+---
+- hosts: servers
+  vars_files:
+    - vars.yml
+  gather_facts: false
+  remote_user: deploy
+  # become: yes
+  # become_user: deploy
+  # become_method: su
+
+  tasks:
+    - name: Clone/pull project repo
+      git: repo={{ repository }}
+           dest={{ install_path }}/{{ project_name }}/app
+           accept_hostkey=yes
+      notify:
+      - restart gunicorn
+    
+    - name: Delete all .pyc files
+      command: find . -name '*.pyc' -delete
+      args:
+        chdir: "{{ install_path }}/{{ project_name }}/app"
+      changed_when: False
+
+    - name: Install python packages
+      pip:
+        requirements: "{{ install_path }}/{{ project_name }}/app/requirements.txt"
+        virtualenv: "{{ install_path }}/{{ project_name }}/env"
+        virtualenv_python: pypy
+      notify:
+      - restart gunicorn
+
+    - name: Copy nginx config
+      template:
+        src: templates/nginx.j2
+        dest: "/etc/nginx/sites-enabled/{{ project_name }}.conf"
+      notify:
+      - restart nginx
+
+    # - name: copy gunicorn config
+    #   template:
+    #     src: "files/gunicorn.j2"
+    #     dest: "/etc/init/gunicorn.conf"
+    #   notify:
+    #   - restart gunicorn
+
+    - name: make sure nginx server is running
+      service: name=nginx state=started enabled=yes
+
+    - name: make sure gunicorn server is running
+      service: name=gunicorn state=started enabled=yes
+
+  handlers: 
+    - name: restart nginx
+      service: name=nginx state=restarted
+
+    - name: restart gunicorn
+      service: name=gunicorn state=restarted

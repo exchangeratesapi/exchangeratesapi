@@ -1,0 +1,2 @@
+[servers]
+138.68.127.248 ansible_python_interpreter=/usr/bin/python3
