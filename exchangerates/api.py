@@ -1,13 +1,14 @@
 from __future__ import division
 
+from decimal import ROUND_HALF_UP, Decimal
+
+import falcon
 import pendulum
 import six
 import ujson
-from decimal import Decimal, ROUND_HALF_UP
-
-import falcon
 from peewee import fn
-from exchangerates.models import db, ExchangeRates
+
+from exchangerates.models import ExchangeRates, db
 
 
 class PeeweeConnectionMiddleware(object):

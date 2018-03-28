@@ -1,11 +1,11 @@
-# import pendulum
-import requests
-
 from datetime import datetime
 from decimal import Decimal
-from huey import crontab, RedisHuey
-from models import ExchangeRates
 from xml.etree import ElementTree
+
+import requests
+from huey import RedisHuey, crontab
+
+from models import ExchangeRates
 
 huey = RedisHuey()
 

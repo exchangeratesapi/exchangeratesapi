@@ -1,4 +1,4 @@
-from peewee import Model, CharField, CompositeKey, DateField, DecimalField
+from peewee import CharField, CompositeKey, DateField, DecimalField, Model
 from playhouse.pool import PooledPostgresqlExtDatabase
 
 db = PooledPostgresqlExtDatabase('exchangerates', max_connections=32, stale_timeout=300)
