@@ -1,0 +1,6 @@
+name: 'exhangerates'
+domain: 'exhangeratesapi.io'
+
+project_path: '/srv/exchangerates/'
+
+postgres_database: exchangerates

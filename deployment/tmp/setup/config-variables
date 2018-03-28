@@ -1,0 +1,4 @@
+cfg_name='exhangerates'
+cfg_domain='exhangeratesapi.io'
+cfg_project_path='/srv/exchangerates/'
+cfg_postgres_database='exchangerates'
