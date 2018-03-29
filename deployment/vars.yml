@@ -23,7 +23,11 @@ system_packages:
   - git
   - nginx
   - postgresql
+  - libpq-dev
   - pypy
+  - pypy-dev
+  - libxml2-dev
+  - libxslt-dev
   - python3-dev
   - python3-pip
   - python3-psycopg2

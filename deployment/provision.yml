@@ -6,12 +6,18 @@
   remote_user: root
 
   tasks:
+    - name: Add PyPy PPA
+      apt_repository: repo=ppa:pypy/ppa
+
+    - name: upgrade APT to the latest packages
+      apt: upgrade=safe update-cache=yes
+
     - name: Install system packages
       apt: pkg={{ item }} update-cache=yes state=present
       with_items: "{{ system_packages }}"
 
     - name: Create deploy user
-      user: name=deploy shell=/bin/bash append=yes groups=sudo
+      user: name=deploy shell=/bin/bash append=yes groups=sudo generate_ssh_key=true
     
     - name: Authorize deploy user with public key
       authorized_key:
@@ -45,5 +51,15 @@
 
     - name: Remove default nginx site
       file: path=/etc/nginx/sites-enabled/default state=absent
+
+    - name: Copy nginx config
+      template:
+        src: templates/nginx.j2
+        dest: "/etc/nginx/sites-enabled/{{ project_name }}.conf"
+
+    - name: copy gunicorn config
+      template:
+        src: templates/gunicorn.j2
+        dest: "/etc/systemd/system/gunicorn.service"
 
 - import_playbook: deploy.yml

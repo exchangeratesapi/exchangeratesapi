@@ -46,8 +46,8 @@ server {
     error_log {{ install_path }}/{{ project_name }}/logs/error.log;
 
     location / {
-        uwsgi_pass 127.0.0.1:5000;
-        include /etc/nginx/uwsgi_params;
+        include proxy_params;
+        proxy_pass http://localhost:5000;
     }
     location /.well-known/acme-challenge/ {
         root /var/lib/letsencrypt/webroot;
