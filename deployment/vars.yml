@@ -5,7 +5,7 @@ domains:
   - www.exchangeratesapi.io
 
 # base path of installation
-install_path: /srv/
+install_path: /srv
 
 # repository
 repository: git@github.com:madisvain/exchangeratesapi.git
