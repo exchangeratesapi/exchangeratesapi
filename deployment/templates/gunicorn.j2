@@ -8,7 +8,7 @@ Group=www-data
 PIDFile=/tmp/gunicorn.pid
 Environment="PATH={{ install_path }}/{{ project_name }}/env/bin"
 WorkingDirectory={{ install_path }}/{{ project_name }}
-ExecStart={{ install_path }}/{{ project_name }}/env/bin/gunicorn --workers 2 -b 127.0.0.1:5000 exchangerates:api
+ExecStart={{ install_path }}/{{ project_name }}/env/bin/gunicorn --workers 2 -b localhost:5000 exchangerates:api
 ExecReload=/bin/kill -s HUP $MAINPID
 ExecStop=/bin/kill -s TERM $MAINPID
 

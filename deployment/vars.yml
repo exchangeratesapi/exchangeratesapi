@@ -15,6 +15,7 @@ ssh_public_key: ~/.ssh/id_rsa.pub
 
 # database
 db_name: exchangerates
+db_user: exchangerates
 
 # system packages
 system_packages:

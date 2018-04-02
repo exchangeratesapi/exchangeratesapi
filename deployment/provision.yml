@@ -48,6 +48,22 @@
       become: yes
       become_user: postgres
       postgresql_db: name={{ db_name }} state=present
+    
+    - name: Ensure user has access to the database
+      become: yes
+      become_user: postgres
+      postgresql_user: db={{ db_name }}
+                       name={{ db_user }}
+                       encrypted=yes
+                       priv=ALL
+                       state=present
+  
+    - name: Ensure user does not have unnecessary privileges
+      become: yes
+      become_user: postgres
+      postgresql_user: name={{ db_user }}
+                       role_attr_flags=NOSUPERUSER,NOCREATEDB
+                       state=present
 
     - name: Remove default nginx site
       file: path=/etc/nginx/sites-enabled/default state=absent
