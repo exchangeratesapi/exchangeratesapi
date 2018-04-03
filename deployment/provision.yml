@@ -19,6 +19,14 @@
     - name: Create deploy user
       user: name=deploy shell=/bin/bash append=yes groups=sudo generate_ssh_key=true
     
+    - name: Allow deploy to restart services
+      lineinfile:
+        path: /etc/sudoers
+        state: present
+        regexp: '^deploy ALL=(ALL) NOPASSWD: /bin/systemctl'
+        line: 'deploy ALL=(ALL) NOPASSWD: /bin/systemctl'
+        validate: 'visudo -cf %s'
+    
     - name: Authorize deploy user with public key
       authorized_key:
         user: deploy
@@ -54,6 +62,7 @@
       become_user: postgres
       postgresql_user: db={{ db_name }}
                        name={{ db_user }}
+                       password={{ db_password }}
                        encrypted=yes
                        priv=ALL
                        state=present

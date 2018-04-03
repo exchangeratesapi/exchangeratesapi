@@ -4,6 +4,7 @@ from playhouse.pool import PooledPostgresqlExtDatabase
 db = PooledPostgresqlExtDatabase(
     database='exchangerates',
     user='exchangerates',
+    password='exchangerates',
     max_connections=32,
     stale_timeout=300
 )
