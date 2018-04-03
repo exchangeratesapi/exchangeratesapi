@@ -5,6 +5,7 @@ db = PooledPostgresqlExtDatabase(
     database='exchangerates',
     user='exchangerates',
     password='exchangerates',
+    host='127.0.0.1',
     max_connections=32,
     stale_timeout=300
 )
