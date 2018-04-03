@@ -82,5 +82,5 @@ app = falcon.API(middleware=[
     PeeweeConnectionMiddleware(),
     CORSMiddleware(),
 ])
-app.add_route('/latest/', exchangerates)
-app.add_route('/{date}/', exchangerates)
+app.add_route('/api/latest/', exchangerates)
+app.add_route('/api/{date}/', exchangerates)
