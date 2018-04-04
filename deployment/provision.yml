@@ -48,6 +48,9 @@
             state=directory
             owner=deploy
             group=deploy
+    
+    - name: Ensure the Redis service is running
+      service: name=redis-server state=started enabled=yes
 
     - name: Ensure the PostgreSQL service is running
       service: name=postgresql state=started enabled=yes
@@ -82,9 +85,14 @@
         src: templates/nginx.j2
         dest: "/etc/nginx/sites-enabled/{{ project_name }}.conf"
 
-    - name: copy gunicorn config
+    - name: Copy gunicorn config
       template:
         src: templates/gunicorn.j2
         dest: "/etc/systemd/system/gunicorn.service"
+
+    - name: Copy huey config
+      template:
+        src: templates/huey.j2
+        dest: "/etc/systemd/system/huey.service"
 
 - import_playbook: deploy.yml

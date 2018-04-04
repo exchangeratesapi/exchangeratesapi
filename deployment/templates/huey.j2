@@ -1,0 +1,16 @@
+[Unit]
+Description=Huey
+After=network.target
+
+[Service]
+User=deploy
+Group=www-data
+PIDFile=/tmp/huey.pid
+Environment="PATH={{ install_path }}/{{ project_name }}/env/bin"
+WorkingDirectory={{ install_path }}/{{ project_name }}/app
+ExecStart={{ install_path }}/{{ project_name }}/env/bin/huey_consumer exchangerates.tasks.huey
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+
+[Install]
+WantedBy=multi-user.target

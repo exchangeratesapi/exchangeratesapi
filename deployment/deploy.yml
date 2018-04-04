@@ -28,14 +28,20 @@
       - restart gunicorn
 
     - name: make sure nginx server is running
-      service: name=nginx state=started enabled=yes
+      systemd: name=nginx state=started enabled=yes
 
     - name: make sure gunicorn server is running
-      service: name=gunicorn state=started enabled=yes
+      systemd: name=gunicorn state=started enabled=yes
+    
+    - name: make sure huey consumer is running
+      systemd: name=huey state=started enabled=yes
 
   handlers: 
     - name: restart nginx
-      service: name=nginx state=restarted
+      systemd: name=nginx state=restarted
 
     - name: restart gunicorn
-      service: name=gunicorn state=restarted
+      systemd: name=gunicorn state=restarted
+    
+    - name: restart huey
+      systemd: name=huey state=restarted
