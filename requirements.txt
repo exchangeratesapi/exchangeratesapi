@@ -4,7 +4,7 @@ falcon==1.4.1
 huey==1.9.1
 meinheld==0.6.1
 peewee==3.2.2
-pendulum
+pendulum==1.4.4
 psycopg2cffi
 redis
 requests
