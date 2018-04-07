@@ -1,10 +1,9 @@
 from __future__ import division
 
+import datetime
 from decimal import ROUND_HALF_UP, Decimal
 
 import falcon
-import pendulum
-import six
 import ujson
 from peewee import fn
 
@@ -47,22 +46,21 @@ class CORSMiddleware(object):
 class ExchangeRateResource(object):
     def on_get(self, request, response, date=None):
         if not date:
-            # TODO: This can be cached to eliminate query
-            date = pendulum.Date.instance(
-                ExchangeRates.select(fn.MAX(ExchangeRates.date)).scalar(database=db)
-            ).to_date_string()
+            date = datetime.date.today()
 
-        exchangerates = ExchangeRates.select(ExchangeRates.currency, ExchangeRates.rate).\
-            where(ExchangeRates.date == date).\
+        exchangerates = ExchangeRates.\
+            select(ExchangeRates.currency, ExchangeRates.rate).\
+            filter(ExchangeRates.date == ExchangeRates.select(fn.MAX(ExchangeRates.date))).\
             order_by(ExchangeRates.currency)
 
         # Symbols
         if 'symbols' in request.params:
-            exchangerates = exchangerates.where(ExchangeRates.currency << request.params['symbols'])
+            exchangerates = exchangerates.\
+                where(ExchangeRates.currency << request.params['symbols'])
         
         # Base
         base = 'EUR'
-        rates = {er.currency:er.rate for er in exchangerates}
+        rates = {er['currency']:er['rate'] for er in exchangerates.dicts()}
         if 'base' in request.params:
             base = request.params['base']
             # TODO: For better performance this can probably be done within Postgres already
@@ -71,7 +69,7 @@ class ExchangeRateResource(object):
 
         response.body = ujson.dumps({
             'base': base,
-            'date': date,
+            'date': date.strftime('%Y-%m-%d'),
             'rates': rates
         })
 
@@ -83,4 +81,4 @@ app = falcon.API(middleware=[
     CORSMiddleware(),
 ])
 app.add_route('/api/latest/', exchangerates)
-app.add_route('/api/{date}/', exchangerates)
+app.add_route('/api/{date:dt("%Y-%m-%d")}/', exchangerates)
