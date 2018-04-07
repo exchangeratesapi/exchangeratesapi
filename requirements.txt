@@ -2,7 +2,7 @@ ansible==2.5.0
 gunicorn==19.7.1
 falcon==1.4.1
 huey==1.9.1
-meinheld
+meinheld==0.6.1
 peewee
 pendulum
 psycopg2cffi
