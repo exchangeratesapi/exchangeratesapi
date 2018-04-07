@@ -6,6 +6,6 @@ meinheld==0.6.1
 peewee==3.2.2
 pendulum==1.4.4
 psycopg2cffi==2.7.7
-redis
+redis==2.10.6
 requests
 ujson
