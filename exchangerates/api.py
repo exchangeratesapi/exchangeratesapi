@@ -48,9 +48,12 @@ class ExchangeRateResource(object):
         if not date:
             date = datetime.date.today()
 
+        subquery = ExchangeRates.filter(ExchangeRates.date <= date).\
+            select(fn.MAX(ExchangeRates.date))
+
         exchangerates = ExchangeRates.\
             select(ExchangeRates.currency, ExchangeRates.rate).\
-            filter(ExchangeRates.date == ExchangeRates.select(fn.MAX(ExchangeRates.date))).\
+            filter(ExchangeRates.date == subquery).\
             order_by(ExchangeRates.currency)
 
         # Symbols
