@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css" integrity="sha256-akwTLZec/XAFvgYgVH1T5/369lhA2Efr22xzCNl1nHs=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <title>Foreign exchange rates API</title>
+  </head>
+  <body>
+    <div id="hero">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light pt-5">
+          <a class="navbar-brand" href="https://exchangeratesapi.io">
+            <img src="logo.svg" alt="Exchange rates API" />
+          </a>
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a href="https://stats.uptimerobot.com/Q6z9gTYrY" class="nav-link">
+                Status
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="https://github.com/madisvain/exchangeratesapi" class="nav-link">
+                Source
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html" class="nav-link">
+                Data sets
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <div class="col-8 offset-2">
+          <h1 class="text-center">
+            Foreign exchange rates API
+            <br/>
+            <small>with currency conversion</small>
+          </h1>
+          <p class="text-center">
+            Exchange rates API is a free service for current and historical foreign exchange rates
+            <br/> published by the
+            <a href="https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html">
+              European Central Bank
+            </a>
+          </p>
+        </div>
+        <div id="shell" class="col-6 offset-3">
+          <pre>
+            <code class="http px-5">
+GET /api/latest HTTP/1.1
+Host: exchangeratesapi.io
+
+{
+  "base": "EUR",
+  "date": "2018-04-08",
+  "rates": {
+    "CAD": 1.565,
+    "CHF": 1.1798,
+    "GBP": 0.87295,
+    "SEK": 10.2983,
+    "EUR": 1.092,
+    "USD": 1.2234,
+    ...
+  }
+}
+            </code>
+          </pre>
+        </div>
+      </div>
+    </div>
+
+    <div id="features">
+      <div class="container">
+        <div class="row">
+          <div class="col-10 offset-1 my-5">
+            <div class="row">
+              <div class="col-3 offset-1">
+                <h3>
+                  <img src="icons/speed.svg" alt="Speed" />
+                  Fast & reliable
+                </h3>
+                <p>
+                  Exchange rates API has been designed and tested to handle thousands of request per second. Also constantly monitored.
+                </p>
+              </div>
+              <div class="col-3 offset-1">
+                <h3>
+                  <img src="icons/exchange.svg" alt="Compatible" />
+                  Fixer.io compatibility
+                </h3>
+                <p>
+                  Built in Fixer.io compatibility so you can keep all the libraries you already like and use daily.
+                </p>
+              </div>
+              <div class="col-3 offset-1">
+                <h3>
+                  <img src="icons/open.svg" alt="Open source" />
+                  Open source
+                </h3>
+                <p>
+                  Everything from the code base, homepage to the deployment process is opensource and free to use under a permissive MIT license.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/http.min.js" integrity="sha256-ze9TA1yfIP6jEh7+8fVq8CxHsydquQNe9O+P05ueO3w=" crossorigin="anonymous"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+  </body>
+</html>
