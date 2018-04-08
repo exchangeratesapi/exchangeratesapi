@@ -5,6 +5,15 @@ a {
   color: #202BFF;
 }
 
+/* Highlight.js */
+pre code.http.hljs {
+  font-size: 11px;
+  background-color: #272833;
+}
+.rounded-corners {
+  border-radius: 4px;
+}
+
 #hero {
   background-color: #F0F1F4;
 }
@@ -34,12 +43,7 @@ a {
   border-radius: 4px 4px 0 0;
 }
 #shell pre, #shell code {
-  width: 100%;
   margin-bottom: 0;
-}
-#shell code.http.hljs {
-  font-size: 11px;
-  background-color: #272833;
 }
 
 #features {
@@ -58,4 +62,11 @@ a {
   color: #FFFFFF;
   letter-spacing: 0;
   line-height: 24px;
+}
+
+#footer {
+  background-color: #F0F1F4;
+}
+#footer .heart{
+  color:#e25555;
 }

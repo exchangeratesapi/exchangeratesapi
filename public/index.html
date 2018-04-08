@@ -4,11 +4,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Hightlight.js -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css" integrity="sha256-akwTLZec/XAFvgYgVH1T5/369lhA2Efr22xzCNl1nHs=" crossorigin="anonymous" />
-    <link rel="stylesheet" href="styles.css">
+    <!-- Google fonts -->
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
-    <title>Foreign exchange rates API</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+
+    <title>Foreign exchange rates API by Madis Väin</title>
   </head>
   <body>
     <div id="hero">
@@ -52,8 +58,7 @@
         <div id="shell" class="col-6 offset-3">
           <pre>
             <code class="http px-5">
-GET /api/latest HTTP/1.1
-Host: exchangeratesapi.io
+GET https://exchangeratesapi.io/api/latest HTTP/1.1
 
 {
   "base": "EUR",
@@ -112,13 +117,83 @@ Host: exchangeratesapi.io
       </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <div class="container">
+      <div class="row">
+        <div class="col-6 offset-3 my-5">
+          <h4>Usage</h4>
+
+          <p>
+            Get the latest foreign exchange reference rates.
+          </p>
+          <pre>
+            <code class="http px-5 rounded-corners">
+GET https://exchangeratesapi.io/api/latest HTTP/1.1
+            </code>
+          </pre>
+
+          <p>
+            Get historical rates for any day since 1999.
+          </p>
+          <pre>
+            <code class="http px-5 rounded-corners">
+GET https://exchangeratesapi.io/api/2010-01-12 HTTP/1.1
+            </code>
+          </pre>
+
+          <p>
+            Rates are quoted against the Euro by default.
+            Quote against a different currency by setting the base parameter in your request.
+          </p>
+          <pre>
+            <code class="http px-5 rounded-corners">
+GET https://exchangeratesapi.io/api/latest?base=USD HTTP/1.1
+            </code>
+          </pre>
+
+          <p>
+            Request specific exchange rates by setting the symbols parameter.
+          </p>
+          <pre>
+            <code class="http px-5 rounded-corners">
+GET https://exchangeratesapi.io/api/latest?symbols=USD,GBP HTTP/1.1
+            </code>
+          </pre>
+
+          <p>
+            Please cache results whenever possible this will allow us to keep the service without any rate limits or api key requirements.
+          </p>
+          <p>
+            The API comes with no warranty but we do our best effort to keep the service working relibly.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <div class="row">
+          <div class="col my-3 text-center">
+            <ul class="list-unstyled mx-auto">
+              <li>
+                <a class="github-button" href="https://github.com/madisvain/exchangeratesapi" data-size="large" data-show-count="true" aria-label="Star madisvain/exchangeratesapi on GitHub">Star</a>
+                <a class="github-button" href="https://github.com/madisvain/exchangeratesapi/fork" data-icon="octicon-repo-forked" data-size="large" data-show-count="true" aria-label="Fork madisvain/exchangeratesapi on GitHub">Fork</a>
+              </li>
+              <li>
+                Made with <span class="heart">❤</span> in Estonia, Tallinn
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Highlight.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/http.min.js" integrity="sha256-ze9TA1yfIP6jEh7+8fVq8CxHsydquQNe9O+P05ueO3w=" crossorigin="anonymous"></script>
     <script>
       hljs.initHighlightingOnLoad();
     </script>
+
+    <!-- Github buttons -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
   </body>
 </html>
