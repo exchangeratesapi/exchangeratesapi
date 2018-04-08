@@ -45,10 +45,17 @@ server {
     access_log {{ install_path }}/{{ project_name }}/logs/access.log;
     error_log {{ install_path }}/{{ project_name }}/logs/error.log;
 
+    index index.html;
     location / {
-        include proxy_params;
-        proxy_pass http://localhost:5000;
+        root /srv/exchangerates/app/public/;
+        try_files $uri $uri/ =404;
     }
+
+    location /api/ {
+        include proxy_params;
+        proxy_pass http://localhost:5000/api/;
+    }
+
     location /.well-known/acme-challenge/ {
         root /var/lib/letsencrypt/webroot;
     }
