@@ -13,6 +13,9 @@ repository: git@github.com:madisvain/exchangeratesapi.git
 # public key for SSH access
 ssh_public_key: ~/.ssh/id_rsa.pub
 
+# Letsencrypt
+certbot_email: madisvain@gmail.com
+
 # database
 db_name: exchangerates
 db_user: exchangerates
@@ -28,11 +31,13 @@ system_packages:
   - libpq-dev
   - pypy
   - pypy-dev
+  - python-certbot-nginx
   - libxml2-dev
   - libxslt-dev
   - python3-dev
   - python3-pip
   - python3-psycopg2
   - python3-virtualenv
+  - software-properties-common
   - redis-server
   - ufw

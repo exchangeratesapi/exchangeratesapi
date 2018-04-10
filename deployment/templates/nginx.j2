@@ -1,7 +1,36 @@
+{% for domain in domains[1:] %}
 server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-    server_name{% for domain in domains %} {{ domain }}{% endfor %};
+    listen 80;
+    listen [::]:80;
+
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    ssl_certificate /etc/letsencrypt/live/{{ domains[0] }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ domains[0] }}/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    server_name  {{ domain }};
+    return 301 https://{{ domains[0] }}$request_uri;
+}
+{% endfor %}
+
+server {
+  listen 80;
+  listen [::]:80;
+  server_name  {{ domains[0] }};
+  return 301 https://{{ domains[0] }}$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    ssl_certificate /etc/letsencrypt/live/{{ domains[0] }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ domains[0] }}/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    server_name {{ domains[0] }};
 
     keepalive_timeout 60;
     proxy_buffers 16 64k;
@@ -54,9 +83,5 @@ server {
     location /api/ {
         include proxy_params;
         proxy_pass http://localhost:5000/api/;
-    }
-
-    location /.well-known/acme-challenge/ {
-        root /var/lib/letsencrypt/webroot;
     }
 }

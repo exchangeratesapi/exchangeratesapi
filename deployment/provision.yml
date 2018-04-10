@@ -8,6 +8,9 @@
   tasks:
     - name: Add PyPy PPA
       apt_repository: repo=ppa:pypy/ppa
+    
+    - name: Add Certbot PPA
+      apt_repository: repo=ppa:certbot/certbot
 
     - name: upgrade APT to the latest packages
       apt: upgrade=safe update-cache=yes
@@ -23,8 +26,8 @@
       lineinfile:
         path: /etc/sudoers
         state: present
-        regexp: '^deploy ALL=(ALL) NOPASSWD: /bin/systemctl'
-        line: 'deploy ALL=(ALL) NOPASSWD: /bin/systemctl'
+        regexp: '^deploy ALL=(ALL) NOPASSWD:'
+        line: '^deploy ALL=(ALL) NOPASSWD: /bin/systemctl'
         validate: 'visudo -cf %s'
     
     - name: Authorize deploy user with public key
@@ -83,7 +86,16 @@
     - name: Copy nginx config
       template:
         src: templates/nginx.j2
+        dest: "/etc/nginx/sites-available/{{ project_name }}.conf"
+    
+    - name: Enable site
+      file:
+        src: "/etc/nginx/sites-available/{{ project_name }}.conf"
         dest: "/etc/nginx/sites-enabled/{{ project_name }}.conf"
+        state: link
+
+    - name: Secure site
+      command: "certbot --nginx certonly --non-interactive --agree-tos --email {{ certbot_email }} -d {{ domains|join(' -d ') }}"
 
     - name: Copy gunicorn config
       template:
