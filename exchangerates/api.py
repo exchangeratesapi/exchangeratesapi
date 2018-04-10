@@ -45,6 +45,11 @@ class CORSMiddleware(object):
 
 class ExchangeRateResource(object):
     def on_get(self, request, response, date=None):
+        # Check that date is in range
+        if date < datetime.datetime(1999, 1, 4):
+            raise falcon.HTTPBadRequest('There is no data for dates older then 1999-01-04.')
+
+        # If latest
         if not date:
             date = datetime.date.today()
 
@@ -52,7 +57,7 @@ class ExchangeRateResource(object):
             select(fn.MAX(ExchangeRates.date))
 
         exchangerates = ExchangeRates.\
-            select(ExchangeRates.currency, ExchangeRates.rate).\
+            select(ExchangeRates.currency, ExchangeRates.rate, ExchangeRates.date).\
             filter(ExchangeRates.date == subquery).\
             order_by(ExchangeRates.currency)
 
@@ -61,18 +66,22 @@ class ExchangeRateResource(object):
             exchangerates = exchangerates.\
                 where(ExchangeRates.currency << request.params['symbols'])
         
+        # Convert to dictionaries
+        exchangerates = exchangerates.dicts()
+        rates = {er['currency']:er['rate'] for er in exchangerates}
+        
         # Base
-        base = 'EUR'
-        rates = {er['currency']:er['rate'] for er in exchangerates.dicts()}
-        if 'base' in request.params:
-            base = request.params['base']
+        base = request.params['base'] if 'base' in request.params else 'EUR'
+        if base != 'EUR':
+            base_rate = (Decimal(1) / rates[base]).quantize(Decimal('0.0001'), ROUND_HALF_UP)
             # TODO: For better performance this can probably be done within Postgres already
             rates = {currency:(rate / rates[base]).quantize(Decimal('0.0001'), ROUND_HALF_UP) for currency, rate in rates.iteritems()}
+            rates['EUR'] = base_rate
             del rates[base]
 
         response.body = ujson.dumps({
             'base': base,
-            'date': date.strftime('%Y-%m-%d'),
+            'date': exchangerates[0]['date'].strftime('%Y-%m-%d'),
             'rates': rates
         })
 

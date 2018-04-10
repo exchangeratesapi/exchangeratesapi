@@ -27,7 +27,7 @@
         path: /etc/sudoers
         state: present
         regexp: '^deploy ALL=(ALL) NOPASSWD:'
-        line: '^deploy ALL=(ALL) NOPASSWD: /bin/systemctl'
+        line: 'deploy ALL=(ALL) NOPASSWD: /bin/systemctl'
         validate: 'visudo -cf %s'
     
     - name: Authorize deploy user with public key
