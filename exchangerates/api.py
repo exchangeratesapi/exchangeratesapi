@@ -46,7 +46,7 @@ class CORSMiddleware(object):
 class ExchangeRateResource(object):
     def on_get(self, request, response, date=None):
         # Check that date is in range
-        if date < datetime.datetime(1999, 1, 4):
+        if date and date < datetime.datetime(1999, 1, 4):
             raise falcon.HTTPBadRequest('There is no data for dates older then 1999-01-04.')
 
         # If latest
