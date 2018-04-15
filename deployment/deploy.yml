@@ -38,10 +38,10 @@
 
   handlers: 
     - name: restart nginx
-      service: name=nginx state=started enabled=yes use=service
+      service: name=nginx state=reload enabled=yes use=service
 
     - name: restart gunicorn
-      service: name=nginx state=started enabled=yes use=service
+      service: name=nginx state=restarted enabled=yes use=service
     
     - name: restart huey
       service: name=nginx state=started enabled=yes use=service
