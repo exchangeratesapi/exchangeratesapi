@@ -73,11 +73,14 @@ class ExchangeRateResource(object):
         # Base
         base = request.params['base'] if 'base' in request.params else 'EUR'
         if base != 'EUR':
-            base_rate = (Decimal(1) / rates[base]).quantize(Decimal('0.0001'), ROUND_HALF_UP)
-            # TODO: For better performance this can probably be done within Postgres already
-            rates = {currency:(rate / rates[base]).quantize(Decimal('0.0001'), ROUND_HALF_UP) for currency, rate in rates.iteritems()}
-            rates['EUR'] = base_rate
-            del rates[base]
+            if base in rates:
+                base_rate = (Decimal(1) / rates[base]).quantize(Decimal('0.0001'), ROUND_HALF_UP)
+                # TODO: For better performance this can probably be done within Postgres already
+                rates = {currency:(rate / rates[base]).quantize(Decimal('0.0001'), ROUND_HALF_UP) for currency, rate in rates.iteritems()}
+                rates['EUR'] = base_rate
+                del rates[base]
+            else:
+                raise falcon.HTTPBadRequest('Currency code {} is not supported.')
 
         response.body = ujson.dumps({
             'base': base,
