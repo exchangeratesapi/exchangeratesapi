@@ -1,4 +1,4 @@
-ansible==2.5.0
+ansible==2.5.1
 gunicorn==19.7.1
 falcon==1.4.1
 huey==1.9.1
