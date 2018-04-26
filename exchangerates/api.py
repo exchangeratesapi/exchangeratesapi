@@ -63,8 +63,9 @@ class ExchangeRateResource(object):
 
         # Symbols
         if 'symbols' in request.params:
+            symbols = request.params['symbols'] if type(request.params['symbols']) is list else [request.params['symbols']]
             exchangerates = exchangerates.\
-                where(ExchangeRates.currency << request.params['symbols'])
+                where(ExchangeRates.currency << symbols)
         
         # Convert to dictionaries
         exchangerates = exchangerates.dicts()
@@ -80,7 +81,7 @@ class ExchangeRateResource(object):
                 rates['EUR'] = base_rate
                 del rates[base]
             else:
-                raise falcon.HTTPBadRequest('Currency code {} is not supported.')
+                raise falcon.HTTPBadRequest('Currency code {} is not supported.'.format(base))
 
         response.body = ujson.dumps({
             'base': base,
