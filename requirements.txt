@@ -1,9 +1,9 @@
-ansible==2.5.0
+ansible==2.5.1
 gunicorn==19.7.1
 falcon==1.4.1
 huey==1.9.1
 meinheld==0.6.1
-peewee==3.2.2
+peewee==3.3.0
 pendulum==1.4.4
 psycopg2cffi==2.7.7
 redis==2.10.6
