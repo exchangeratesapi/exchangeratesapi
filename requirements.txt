@@ -3,7 +3,7 @@ gunicorn==19.7.1
 falcon==1.4.1
 huey==1.9.1
 meinheld==0.6.1
-peewee==3.3.0
+peewee==3.3.1
 pendulum==1.5.1
 psycopg2cffi==2.7.7
 redis==2.10.6
