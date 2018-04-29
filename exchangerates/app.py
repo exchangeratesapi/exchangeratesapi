@@ -3,7 +3,7 @@ import requests
 
 from datetime import datetime
 from decimal import Decimal
-from os import environ
+from os import getenv
 from xml.etree import ElementTree
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -18,11 +18,9 @@ LAST_90_DAYS_RATES_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hi
 
 
 app = Sanic()
-
-db_config = {'DB_HOST': 'localhost', 'DB_DATABASE': 'exchangerates'}
-if 'DATABASE_URL' in environ:
-    db_config = parse_database_url(url=environ['DATABASE_URL'])
-app.config.update(db_config)
+app.config.update(parse_database_url(
+    url=getenv('DATABASE_URL', 'postgresql://localhost/exchangerates')
+))
 
 db = Gino()
 db.init_app(app)
@@ -49,6 +47,7 @@ async def update_rates(historic=False):
 
     data = envelope.findall('./eurofxref:Cube/eurofxref:Cube[@time]', namespaces)
     for d in data:
+        print(d)
         time = datetime.strptime(d.attrib['time'], '%Y-%m-%d').date()
         rates = await ExchangeRates.get(time)
         if not rates:
@@ -63,8 +62,10 @@ async def initialize_scheduler(app, loop):
     # Check that tables exist
     await db.gino.create_all()
 
-    # Fill up database with rates
-    # await update_rates(historic=True)
+    # Fill up database with rates if empty
+    count = await db.func.count(ExchangeRates.date).gino.scalar()
+    if count == 0:
+        await update_rates(historic=True)
 
     # Schedule exchangerate updates
     scheduler = AsyncIOScheduler()

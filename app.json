@@ -16,9 +16,6 @@
       "value": 4
     }
   },
-  "scripts": {
-    // "postdeploy": "bundle exec rake bootstrap"
-  },
   "addons": [
     "heroku-postgresql"
   ]

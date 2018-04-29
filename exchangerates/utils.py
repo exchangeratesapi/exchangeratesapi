@@ -37,10 +37,11 @@ def parse_database_url(url):
             hostname = hostname.split(":", 1)[0]
         hostname = hostname.replace('%2f', '/').replace('%2F', '/')
 
-    return {
-        'DB_DATABASE': urlparse.unquote(path or ''),
-        'DB_USER': urlparse.unquote(url.username or ''),
-        'DB_PASSWORD': urlparse.unquote(url.password or ''),
+    config = {
+        'DB_DATABASE': urlparse.unquote(path) if path else None,
+        'DB_USER': urlparse.unquote(url.username) if url.username else None,
+        'DB_PASSWORD': urlparse.unquote(url.password) if url.password else None,
         'DB_HOST': hostname,
         'DB_PORT': url.port
     }
+    return {k: v for k, v in config.items() if v is not None}
