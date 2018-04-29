@@ -1,0 +1,1 @@
+web: gunicorn exchangerates.app:app --worker-class sanic.worker.GunicornWorker --max-requests 1000

@@ -10,10 +10,16 @@
     "api",
     "exchange rates"
   ],
+  "env": {
+    "WEB_CONCURRENCY": {
+      "description": "The number of gunicorn workers to run.",
+      "value": 4
+    }
+  },
   "scripts": {
     // "postdeploy": "bundle exec rake bootstrap"
   },
   "addons": [
-    "heroku-postgres"
+    "heroku-postgresql"
   ]
 }

@@ -1,4 +1,5 @@
 import itertools
+import os
 import requests
 
 from datetime import datetime
@@ -8,15 +9,17 @@ from xml.etree import ElementTree
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from gino.dialects.asyncpg import JSONB
 from sanic import Sanic
-from sanic.response import json
+from sanic.response import file, json
 
 from exchangerates.utils import Gino
 
 DB_HOST = 'localhost'
 DB_DATABASE = 'exchangerates'
+# DATABASE_URL = os.environ['DATABASE_URL']
 
 HISTORIC_RATES_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml'
 LAST_90_DAYS_RATES_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml'
+
 
 app = Sanic()
 app.config.DB_HOST = DB_HOST
@@ -117,10 +120,13 @@ async def exchange_rates(request, date=None):
     })
 
 
-# Static content
-app.static('/static', './static')
-app.static('/', './templates/index.html')
+# Website
+@app.route('/')
+async def index(request):
+    return await file('./exchangerates/templates/index.html')
 
+# Static content
+app.static('/static', './exchangerates/static')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000, access_log=False, debug=False)
+    app.run(host='0.0.0.0', port=8000, access_log=False, debug=True)
