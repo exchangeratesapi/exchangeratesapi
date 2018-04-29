@@ -1,0 +1,25 @@
+{
+  "name": "Exchange rates API",
+  "description": "A painless Exchange rates API",
+  "website": "https://exchangeratesapi.io",
+  "repository": "https://github.com/madisvain/exchangeratesapi",
+  "logo": "https://exchangeratesapi.io/static/logo.svg",
+  "keywords": [
+    "python",
+    "sanic",
+    "api",
+    "exchange rates"
+  ],
+  "env": {
+    "WEB_CONCURRENCY": {
+      "description": "The number of gunicorn workers to run.",
+      "value": 4
+    }
+  },
+  "scripts": {
+    // "postdeploy": "bundle exec rake bootstrap"
+  },
+  "addons": [
+    "heroku-postgresql"
+  ]
+}
