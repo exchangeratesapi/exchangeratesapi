@@ -97,8 +97,9 @@ async def exchange_rates(request, date=None):
         base = request.raw_args['base']
 
         if base in rates:
-            rates = {currency: rate / rates[base] for currency, rate in rates.items()}
-            rates['EUR'] = Decimal(1) / Decimal(rates[base])
+            base_rate = Decimal(rates[base])
+            rates = {currency: Decimal(rate) / base_rate for currency, rate in rates.items()}
+            rates['EUR'] = Decimal(1) / base_rate
         else:
             return json({'error': 'Base \'{}\' is not supported.'.format(base)}, status=400)
 
