@@ -47,7 +47,6 @@ async def update_rates(historic=False):
 
     data = envelope.findall('./eurofxref:Cube/eurofxref:Cube[@time]', namespaces)
     for d in data:
-        print(d)
         time = datetime.strptime(d.attrib['time'], '%Y-%m-%d').date()
         rates = await ExchangeRates.get(time)
         if not rates:
