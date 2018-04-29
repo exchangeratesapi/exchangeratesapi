@@ -1,9 +1,9 @@
 import itertools
-import os
 import requests
 
 from datetime import datetime
 from decimal import Decimal
+from os import environ
 from xml.etree import ElementTree
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -11,19 +11,19 @@ from gino.dialects.asyncpg import JSONB
 from sanic import Sanic
 from sanic.response import file, json
 
-from exchangerates.utils import Gino
-
-DB_HOST = 'localhost'
-DB_DATABASE = 'exchangerates'
-# DATABASE_URL = os.environ['DATABASE_URL']
+from exchangerates.utils import Gino, parse_database_url
 
 HISTORIC_RATES_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml'
 LAST_90_DAYS_RATES_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml'
 
 
 app = Sanic()
-app.config.DB_HOST = DB_HOST
-app.config.DB_DATABASE = DB_DATABASE
+
+db_config = {'DB_HOST': 'localhost', 'DB_DATABASE': 'exchangerates'}
+if 'DATABASE_URL' in environ:
+    db_config = parse_database_url(url=environ['DATABASE_URL'])
+app.config.update(db_config)
+
 db = Gino()
 db.init_app(app)
 
