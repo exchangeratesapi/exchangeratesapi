@@ -1,3 +1,4 @@
+import fcntl
 import itertools
 import requests
 
@@ -62,15 +63,21 @@ async def initialize_scheduler(app, loop):
     # Check that tables exist
     await db.gino.create_all()
 
-    # Fill up database with rates if empty
-    count = await db.func.count(ExchangeRates.date).gino.scalar()
-    # if count == 0:
-    await update_rates(historic=True)
-
     # Schedule exchangerate updates
-    scheduler = AsyncIOScheduler()
-    scheduler.add_job(update_rates, 'interval', hours=1)
-    scheduler.start()
+    try:
+        _ = open('scheduler.lock', 'w')
+        fcntl.lockf(_.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+
+        scheduler = AsyncIOScheduler()
+        scheduler.add_job(update_rates, 'interval', hours=1)
+        scheduler.start()
+
+        # Fill up database with rates if empty
+        count = await db.func.count(ExchangeRates.date).gino.scalar()
+        if count == 0:
+            await update_rates(historic=True)
+    except BlockingIOError:
+        pass
 
 
 @app.route('/api/latest')
