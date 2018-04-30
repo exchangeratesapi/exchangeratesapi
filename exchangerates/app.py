@@ -63,8 +63,8 @@ async def initialize_scheduler(app, loop):
 
     # Fill up database with rates if empty
     count = await db.func.count(ExchangeRates.date).gino.scalar()
-    if count == 0:
-        await update_rates(historic=True)
+    # if count == 0:
+    await update_rates(historic=True)
 
     # Schedule exchangerate updates
     scheduler = AsyncIOScheduler()
