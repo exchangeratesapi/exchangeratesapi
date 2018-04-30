@@ -69,13 +69,15 @@ async def initialize_scheduler(app, loop):
         fcntl.lockf(_.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
 
         scheduler = AsyncIOScheduler()
-        scheduler.add_job(update_rates, 'interval', hours=1)
         scheduler.start()
 
-        # Fill up database with rates if empty
+        # Updates lates 90 days data
+        scheduler.add_job(update_rates, 'interval', hours=1)
+
+        # Fill up database with rates
         count = await db.func.count(ExchangeRates.date).gino.scalar()
         if count == 0:
-            await update_rates(historic=True)
+            scheduler.add_job(update_rates, kwargs={'historic': True})
     except BlockingIOError:
         pass
 
