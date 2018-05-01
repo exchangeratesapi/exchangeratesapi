@@ -13,7 +13,7 @@ from raven.contrib.sanic import Sentry
 from sanic import Sanic
 from sanic.response import file, json
 
-from exchangerates.utils import Gino, parse_database_url
+from exchangerates.utils import Gino, cors, parse_database_url
 
 HISTORIC_RATES_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml'
 LAST_90_DAYS_RATES_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml'
@@ -88,6 +88,7 @@ async def initialize_scheduler(app, loop):
 
 @app.route('/api/latest')
 @app.route('/api/<date>')
+@cors()
 async def exchange_rates(request, date=None):
     dt = datetime.now()
     if date:

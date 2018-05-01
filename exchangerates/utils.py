@@ -1,7 +1,11 @@
 import ujson
 import urllib.parse as urlparse
 
+from functools import wraps
+from inspect import isawaitable
+
 from gino.ext.sanic import Gino as GinoBase
+from sanic.response import BaseHTTPResponse
 
 
 class Gino(GinoBase):
@@ -14,6 +18,31 @@ class Gino(GinoBase):
             json_deserializer=ujson.loads,
             **kwargs
         )
+
+
+def cors(origin=None):
+    CORS_HEADERS = {
+        'Access-Control-Allow-Credentials': 'true',
+        'Access-Control-Allow-Methods': 'GET',
+        'Access-Control-Allow-Origin': '*'
+    }
+
+    def decorator(fn):
+        @wraps(fn)
+        def wrap(*args, **kwargs):
+            response = fn(*args, **kwargs)
+            if isinstance(response, BaseHTTPResponse):
+                response.headers.update(CORS_HEADERS)
+                return response
+            elif isawaitable(response):
+                async def make_cors():
+                    r = await response
+                    r.headers.update(CORS_HEADERS)
+                    return r
+                return make_cors()
+            return response
+        return wrap
+    return decorator
 
 
 def parse_database_url(url):
