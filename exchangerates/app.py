@@ -54,7 +54,6 @@ async def update_rates(historic=False):
     for d in data:
         time = datetime.strptime(d.attrib['time'], '%Y-%m-%d').date()
         rates = await ExchangeRates.get(time)
-        print(rates)
         if not rates:
             await ExchangeRates.create(
                 date=time,
