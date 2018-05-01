@@ -11,7 +11,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from gino.dialects.asyncpg import JSONB
 from raven.contrib.sanic import Sentry
 from sanic import Sanic
-from sanic.response import file, json
+from sanic.response import file, html, json, redirect
 
 from exchangerates.utils import Gino, cors, parse_database_url
 
@@ -88,10 +88,25 @@ async def initialize_scheduler(app, loop):
         pass
 
 
-@app.route('/api/latest')
-@app.route('/api/<date>')
+@app.middleware('request')
+async def force_ssl(request):
+    if not app.debug and request.scheme != 'https':
+        return redirect(request.url.replace('http://', 'https://', 1), status=301)
+
+
+@app.middleware('request')
+async def force_naked_domain(request):
+    if request.host.startswith('www.'):
+        return redirect(request.url.replace('www.', '', 1), status=301)
+
+
+@app.route('/api/latest', methods=['GET', 'HEAD'])
+@app.route('/api/<date>', methods=['GET', 'HEAD'])
 @cors()
 async def exchange_rates(request, date=None):
+    if request.method == 'HEAD':
+        return json('')
+
     dt = datetime.now()
     if date:
         try:
@@ -139,8 +154,10 @@ async def exchange_rates(request, date=None):
 
 
 # Website
-@app.route('/')
+@app.route('/', methods=['GET', 'HEAD'])
 async def index(request):
+    if request.method == 'HEAD':
+        return html('')
     return await file('./exchangerates/templates/index.html')
 
 # Static content
