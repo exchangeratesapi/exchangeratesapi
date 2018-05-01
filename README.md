@@ -38,7 +38,7 @@ let demo = () => {
   alert("£1 = $" + rate.toFixed(4))
 }
 
-fetch('https://api.fixer.io/latest')
+fetch('https://exchangeratesapi.io/api/latest')
   .then((resp) => resp.json())
   .then((data) => fx.rates = data.rates)
   .then(demo)
@@ -46,62 +46,34 @@ fetch('https://api.fixer.io/latest')
 
 ## Stack
 
-Exchange rates API is built upon Falcon to achieve high throughput. The current setup can easily handle thousands of requests per second using the Sqlite or Postgres database with Peewee ORM.
+Exchange rates API is built upon Sanic to achieve high throughput. The current setup can asyncronously handle thousands of requests per second.
 
-Further improvements in performance are possible with caching and in SQL base currency conversion.
-
-For maximum performance PyPy2 is the recommended or CPython. Gunicorn as the WSGI server with Meinheld worker.
-
-#### Main libraries used
-* [Falcon](https://github.com/falconry/falcon)
-* [Peewee](https://github.com/coleifer/peewee)
-* [Huey](https://github.com/coleifer/huey)
-* [UltraJSON](https://github.com/esnme/ultrajson)
+#### Libraries used
+* [Sanic](https://github.com/channelcat/sanic)
+* [GINO](https://github.com/fantix/gino)
+* [asyncpg](https://github.com/MagicStack/asyncpg)
+* [requests](https://github.com/requests/requests)
+* [APScheduler](https://github.com/agronholm/apscheduler)
+* [uvloop](https://github.com/MagicStack/uvloop)
+* [ultraJSON](https://github.com/esnme/ultrajson)
 
 ## Deployment
 #### Virtualenv
 ```shell
-virtualenv env -p pypy
+pipenv shell
 ```
 
-#### PIP
+#### Install packages
 ```shell
-pip install -r requirements.txt --upgrade
+pipenv install
 ```
 
-...
-_TODO_
+#### Load in initial data & Scheduler
+The scheduler will keep your database up to date hourly with information from European Central bank. It will download the last 90 days worth of data every hour.
 
-## Database
-#### Create database
-```shell
-createdb exchangerates
-```
-
-#### Create database tables
-```python
-from exchangerates.models import db, ExchangeRates
-
-with db:
-  db.create_tables([ExchangeRates])
-```
-
-#### Load in initial data
-
-#### Run the scheduler
-The scheduler will keep your database up to date hourly with information from European Central bank. It will download the last 90 days worth of data.
-
-Probably once a day would also be as good because the rates are updated once a day:
 _The reference rates are usually updated around 16:00 CET on every working day, except on TARGET closing days. They are based on a regular daily concertation procedure between central banks across Europe, which normally takes place at 14:15 CET._
 
-```shell
-huey_consumer.py exchangerates.tasks.huey
-```
-
-#### Run web server
-```shell
-gunicorn exchangerates.api:app --workers=2 --worker-class=meinheld.gmeinheld.MeinheldWorker
-```
+On initialization it will check the database. If it's empty all the historic rates will be downloaded and records created in the database.
 
 ## Development
 ```shell
