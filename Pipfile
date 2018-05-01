@@ -11,6 +11,8 @@ requests = "*"
 gunicorn = "*"
 gino = "*"
 apscheduler = "*"
+raven = {extras = ["sanic"]}
+blinker = "*"
 
 [dev-packages]
 

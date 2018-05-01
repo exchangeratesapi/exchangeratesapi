@@ -9,6 +9,7 @@ from xml.etree import ElementTree
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from gino.dialects.asyncpg import JSONB
+from raven.contrib.sanic import Sentry
 from sanic import Sanic
 from sanic.response import file, json
 
@@ -23,8 +24,11 @@ app.config.update(parse_database_url(
     url=getenv('DATABASE_URL', 'postgresql://localhost/exchangerates')
 ))
 
-db = Gino()
-db.init_app(app)
+# Database
+db = Gino(app)
+
+# Sentry
+sentry = Sentry(app)
 
 
 class ExchangeRates(db.Model):
