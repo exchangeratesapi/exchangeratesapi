@@ -89,7 +89,7 @@ async def initialize_scheduler(app, loop):
 
 @app.middleware('request')
 async def force_ssl(request):
-    print('Debug: {}'.format(request.debug))
+    print('Debug: {}'.format(app.debug))
     print('Scheme: {}'.format(request.scheme))
     # if not app.debug and request.scheme != 'https':
     #     return redirect(request.url.replace('http://', 'https://', 1), status=301)
