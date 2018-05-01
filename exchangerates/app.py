@@ -87,18 +87,19 @@ async def initialize_scheduler(app, loop):
         pass
 
 
-"""
 @app.middleware('request')
 async def force_ssl(request):
-    if not app.debug and request.scheme != 'https':
-        return redirect(request.url.replace('http://', 'https://', 1), status=301)
+    print('Debug: {}'.format(request.debug))
+    print('Scheme: {}'.format(request.scheme))
+    # if not app.debug and request.scheme != 'https':
+    #     return redirect(request.url.replace('http://', 'https://', 1), status=301)
 
 
 @app.middleware('request')
 async def force_naked_domain(request):
-    if request.host.startswith('www.'):
-        return redirect(request.url.replace('www.', '', 1), status=301)
-"""
+    print('Host: {}'.format(request.host))
+    # if request.host.startswith('www.'):
+    #     return redirect(request.url.replace('www.', '', 1), status=301)
 
 
 @app.route('/api/latest', methods=['GET', 'HEAD'])
