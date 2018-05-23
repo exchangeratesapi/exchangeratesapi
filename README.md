@@ -3,6 +3,7 @@
 Exchange rates API is a free service for current and historical foreign exchange rates [published by the European Central Bank](https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html).
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/madisvain/exchangeratesapi)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmadisvain%2Fexchangeratesapi.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmadisvain%2Fexchangeratesapi?ref=badge_shield)
 
 ## Usage
 
@@ -87,3 +88,6 @@ Madis Väin (madisvain on Github, Twitter) is the original creator of the Exchan
 
 ## License
 MIT
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmadisvain%2Fexchangeratesapi.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmadisvain%2Fexchangeratesapi?ref=badge_large)
