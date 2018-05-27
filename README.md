@@ -1,7 +1,5 @@
 # Exchange Rates API
 
-This is an effort to make a scalable alternative to the fixer.io API that will be discontinued on June 1st, 2018.
-
 Exchange rates API is a free service for current and historical foreign exchange rates [published by the European Central Bank](https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html).
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/madisvain/exchangeratesapi)
