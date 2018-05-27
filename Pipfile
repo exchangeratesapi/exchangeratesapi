@@ -15,6 +15,7 @@ raven = {extras = ["sanic"]}
 blinker = "*"
 
 [dev-packages]
+pylint = "*"
 
 [requires]
 python_version = "3.6"

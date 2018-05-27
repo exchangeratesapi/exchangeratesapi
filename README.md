@@ -79,7 +79,7 @@ On initialization it will check the database. If it's empty all the historic rat
 
 ## Development
 ```shell
-gunicorn exchangerates.api:app --reload
+gunicorn exchangerates.app:app --worker-class sanic.worker.GunicornWorker --reload
 ```
 
 ## Contributing
