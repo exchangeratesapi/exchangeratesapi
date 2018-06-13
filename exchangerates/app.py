@@ -21,7 +21,7 @@ LAST_90_DAYS_RATES_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hi
 
 app = Sanic()
 app.config.update(parse_database_url(
-    url=getenv('HEROKU_POSTGRESQL_ROSE_URL', 'postgresql://localhost/exchangerates')
+    url=getenv('DATABASE_URL', 'postgresql://localhost/exchangerates')
 ))
 
 # Database
