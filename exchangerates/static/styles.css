@@ -13,7 +13,6 @@ pre code.http.hljs {
 .rounded-corners {
   border-radius: 4px;
 }
-
 #hero {
   background-color: #F0F1F4;
 }
@@ -37,7 +36,6 @@ pre code.http.hljs {
 #hero nav a.nav-link {
   color: #202BFF;
 }
-
 #shell {
   background-color: #272833;
   border-radius: 4px 4px 0 0;
@@ -45,7 +43,6 @@ pre code.http.hljs {
 #shell pre, #shell code {
   margin-bottom: 0;
 }
-
 #features {
   color: #fff;
   background-color: #202BFF;
@@ -57,13 +54,11 @@ pre code.http.hljs {
   letter-spacing: 0;
 }
 #features p {
-  font-family: Lato-Regular;
   font-size: 14px;
   color: #FFFFFF;
   letter-spacing: 0;
   line-height: 24px;
 }
-
 #footer {
   background-color: #F0F1F4;
 }
