@@ -79,10 +79,7 @@ async def initialize_scheduler(app, loop):
 
         # Fill up database with rates
         count = await db.func.count(ExchangeRates.date).gino.scalar()
-        if count == 0:
-            scheduler.add_job(update_rates, kwargs={'historic': True})
-        else:
-            scheduler.add_job(update_rates)
+        scheduler.add_job(update_rates, kwargs={'historic': True})
     except BlockingIOError:
         pass
 
