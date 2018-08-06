@@ -16,6 +16,7 @@ blinker = "*"
 
 [dev-packages]
 pylint = "*"
+black = "*"
 
 [requires]
 python_version = "3.6"
