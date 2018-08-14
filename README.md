@@ -38,7 +38,7 @@ let demo = () => {
   alert("£1 = $" + rate.toFixed(4))
 }
 
-fetch('https://exchangeratesapi.io/api/latest')
+fetch('https://api.exchangeratesapi.io/latest')
   .then((resp) => resp.json())
   .then((data) => fx.rates = data.rates)
   .then(demo)
