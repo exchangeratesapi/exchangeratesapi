@@ -1,8 +1,7 @@
 FROM python:3.6.6-stretch
 
-# install tool
+# install tools
 RUN pip3 install pipenv
-#RUN apk --update --no-cache add bash
 
 WORKDIR /usr/src/app
 COPY . .
