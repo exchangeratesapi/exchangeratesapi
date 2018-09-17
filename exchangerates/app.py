@@ -102,6 +102,8 @@ async def force_naked_domain(request):
         return redirect(request.url.replace("www.", "", 1), status=301)
 
 
+@app.route("/latest", methods=["GET", "HEAD"])
+@app.route("/<date>", methods=["GET", "HEAD"])
 @app.route("/api/latest", methods=["GET", "HEAD"])
 @app.route("/api/<date>", methods=["GET", "HEAD"])
 @cors()
