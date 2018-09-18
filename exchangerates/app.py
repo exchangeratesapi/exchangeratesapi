@@ -172,6 +172,12 @@ async def exchange_rates(request, date=None):
     )
 
 
+# api.ExchangeratesAPI.io
+@app.route("/", methods=["GET"], host="api.exchangeratesapi.io")
+async def index(request):
+    return json({"details": "https://exchangeratesapi.io"})
+
+
 # Website
 @app.route("/", methods=["GET", "HEAD"])
 async def index(request):
