@@ -172,6 +172,83 @@ async def exchange_rates(request, date=None):
     )
 
 
+@app.route("/history", methods=["GET", "HEAD"])
+@app.route("/api/history", methods=["GET", "HEAD"])
+@cors()
+async def exchange_rates(request):
+    if request.method == "HEAD":
+        return json("")
+
+    if "start_at" in request.raw_args:
+        try:
+            start_at = datetime.strptime(request.raw_args["start_at"], "%Y-%m-%d")
+        except ValueError as e:
+            return json(
+                {"error": "start_at parameter format", "exception": "{}".format(e)},
+                status=400,
+            )
+    else:
+        return json({"error": "missing start_at parameter"})
+
+    if "end_at" in request.raw_args:
+        try:
+            end_at = datetime.strptime(request.raw_args["end_at"], "%Y-%m-%d")
+        except ValueError as e:
+            return json(
+                {"error": "end_at parameter format", "exception": "{}".format(e)},
+                status=400,
+            )
+    else:
+        return json({"error": "missing end_at parameter"})
+
+    exchange_rates = (
+        await ExchangeRates.query.where(ExchangeRates.date >= start_at.date())
+        .where(ExchangeRates.date <= end_at.date())
+        .order_by(ExchangeRates.date.asc())
+        .gino.all()
+    )
+
+    base = "EUR"
+    historic_rates = {}
+    for er in exchange_rates:
+        rates = er.rates
+
+        if "base" in request.raw_args and request.raw_args["base"] != "EUR":
+            base = request.raw_args["base"]
+
+            if base in rates:
+                base_rate = Decimal(rates[base])
+                rates = {
+                    currency: Decimal(rate) / base_rate
+                    for currency, rate in rates.items()
+                }
+                rates["EUR"] = Decimal(1) / base_rate
+            else:
+                return json(
+                    {"error": "Base '{}' is not supported.".format(base)}, status=400
+                )
+
+        # Symbols
+        if "symbols" in request.args:
+            symbols = list(
+                itertools.chain.from_iterable(
+                    [symbol.split(",") for symbol in request.args["symbols"]]
+                )
+            )
+
+            if all(symbol in rates for symbol in symbols):
+                rates = {symbol: rates[symbol] for symbol in symbols}
+            else:
+                return json(
+                    {"error": "Symbols '{}' are invalid.".format(",".join(symbols))},
+                    status=400,
+                )
+
+        historic_rates[er.date] = rates
+
+    return json({"base": base, "start_at": start_at.date().isoformat(), "end_at": end_at.date().isoformat(), "rates": historic_rates})
+
+
 # api.ExchangeratesAPI.io
 @app.route("/", methods=["GET"], host="api.exchangeratesapi.io")
 async def index(request):
