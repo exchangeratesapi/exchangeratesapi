@@ -15,7 +15,7 @@ raven = {extras = ["sanic"]}
 blinker = "*"
 
 [dev-packages]
-pylint = "*"
+pylint = "<2.0.0"
 black = "*"
 
 [requires]
