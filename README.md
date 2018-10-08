@@ -6,6 +6,7 @@ Exchange rates API is a free service for current and historical foreign exchange
 
 ## Usage
 
+#### Lates & specific date rates
 Get the latest foreign exchange rates.
 
 ```http
@@ -29,6 +30,27 @@ Request specific exchange rates by setting the symbols parameter.
 ```http
 GET /latest?symbols=USD,GBP
 ```
+
+#### Rates history
+Get historical rates for a time period.
+
+```http
+GET /history?start_at=2018-01-01&end_at=2018-09-01
+```
+
+Limit results to specific exchange rates to save bandwidth with the symbols parameter.
+
+```http
+GET /history?start_at=2018-01-01&end_at=2018-09-01&symbols=ILS,JPY
+```
+
+Quote the historical rates against a different currency.
+
+```http
+GET /history?start_at=2018-01-01&end_at=2018-09-01&base=USD
+```
+
+#### Client side usage
 
 The primary use case is client side. For instance, with [money.js](https://openexchangerates.github.io/money.js/) in the browser
 
