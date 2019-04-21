@@ -66,6 +66,9 @@ fetch('https://api.exchangeratesapi.io/latest')
   .then(demo)
 ```
 
+## API wrappers
+* PHP - [https://github.com/benmajor/ExchangeRatesAPI](https://github.com/benmajor/ExchangeRatesAPI)
+
 ## Stack
 
 Exchange rates API is built upon Sanic to achieve high throughput. The current setup can asyncronously handle thousands of requests per second.
