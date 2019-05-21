@@ -82,6 +82,12 @@ Exchange rates API is built upon Sanic to achieve high throughput. The current s
 * [uvloop](https://github.com/MagicStack/uvloop)
 * [ultraJSON](https://github.com/esnme/ultrajson)
 
+## Configuration
+
+Set the DISABLE_META_SITE environment variable to '1' to stop responding to GET at / and serving the static website.  
+
+Set the SCHEDULER_LOCKFILE environment variable to override the default 'scheduler.lock' file (used in Docker development mode) 
+
 ## Deployment
 #### Virtualenv
 ```shell
@@ -91,6 +97,28 @@ pipenv shell
 #### Install packages
 ```shell
 pipenv install
+```
+
+#### Docker
+You may build a container exposing the API on (container) port 8000:
+```
+cd exchangeratesapi
+docker build --build-arg TARGET_ENV=production -t exchangeratesapi .
+docker run -e "DATABASE_URL=postgresql://user:pass@dbhost/dbname" exchangeratesapi:latest
+```
+
+Or alternatively through docker-compose (assuming the docker-compose.yml file is outside the exchangeratesapi directory):
+``` 
+exchangeratesapi:
+    build:
+      args:
+        TARGET_ENV: production
+      context: ./exchangeratesapi
+    environment:
+      DATABASE_URL: postgresql://user:pass@dbhost/dbname
+    expose:
+    - '8000'
+    restart: always
 ```
 
 #### Load in initial data & Scheduler
@@ -103,6 +131,32 @@ On initialization it will check the database. If it's empty all the historic rat
 ## Development
 ```shell
 gunicorn exchangerates.app:app --worker-class sanic.worker.GunicornWorker --reload
+```
+
+#### Docker
+You may develop while running the app in docker, and have code changes reload automatically.
+For that we mount the current directory (exchangeratesapi) as a volume into the docker and run gunicorn with --reload
+```
+cd exchangeratesapi
+docker build --build-arg TARGET_ENV=development -t exchangeratesapi_dev .
+docker run -e "DATABASE_URL=postgresql://user:pass@dbhost/dbname" -v "$PWD:/usr/src/app:ro" exchangeratesapi_dev:latest
+```
+
+Or alternatively through docker-compose (assuming the docker-compose.yml file is outside the exchangeratesapi directory):
+``` 
+exchangeratesapi:
+    build:
+      args:
+        TARGET_ENV: development
+      context: ./exchangeratesapi
+    environment:
+      DATABASE_URL: postgresql://user:pass@dbhost/dbname
+      DISABLE_META_SITE: 1
+    expose:
+    - '8000'
+    restart: always
+    volumes:
+    - ./exchangeratesapi:/usr/src/app:ro
 ```
 
 ## Contributing

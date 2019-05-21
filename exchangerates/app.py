@@ -74,7 +74,7 @@ async def initialize_scheduler(app, loop):
 
     # Schedule exchangerate updates
     try:
-        _ = open("scheduler.lock", "w")
+        _ = open(getenv("SCHEDULER_LOCKFILE", "scheduler.lock"), "w")
         fcntl.lockf(_.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
 
         scheduler = AsyncIOScheduler()
@@ -248,25 +248,25 @@ async def exchange_rates(request):
 
     return json({"base": base, "start_at": start_at.date().isoformat(), "end_at": end_at.date().isoformat(), "rates": historic_rates})
 
-
-# api.ExchangeratesAPI.io
-@app.route("/", methods=["GET"], host="api.exchangeratesapi.io")
-async def index(request):
-    return json({"details": "https://exchangeratesapi.io"}, escape_forward_slashes=False)
-
-
-# Website
-@app.route("/", methods=["GET", "HEAD"])
-async def index(request):
-    if request.method == "HEAD":
-        return html("")
-    return await file("./exchangerates/templates/index.html")
+if getenv("DISABLE_META_SITE", '0') != '1':
+    # api.ExchangeratesAPI.io
+    @app.route("/", methods=["GET"], host="api.exchangeratesapi.io")
+    async def index(request):
+        return json({"details": "https://exchangeratesapi.io"}, escape_forward_slashes=False)
 
 
-# Static content
-app.static("/static", "./exchangerates/static")
-app.static("/robots.txt", "./exchangerates/static/robots.txt")
-app.static("/favicon.ico", "./exchangerates/static/favicon.ico")
+    # Website
+    @app.route("/", methods=["GET", "HEAD"])
+    async def index(request):
+        if request.method == "HEAD":
+            return html("")
+        return await file("./exchangerates/templates/index.html")
+
+
+    # Static content
+    app.static("/static", "./exchangerates/static")
+    app.static("/robots.txt", "./exchangerates/static/robots.txt")
+    app.static("/favicon.ico", "./exchangerates/static/favicon.ico")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, access_log=False, debug=True)
