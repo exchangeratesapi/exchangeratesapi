@@ -151,7 +151,6 @@ exchangeratesapi:
       context: ./exchangeratesapi
     environment:
       DATABASE_URL: postgresql://user:pass@dbhost/dbname
-      DISABLE_META_SITE: 1
     expose:
     - '8000'
     restart: always
