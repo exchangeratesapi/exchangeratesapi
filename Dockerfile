@@ -1,6 +1,10 @@
 ARG TARGET_ENV=production
-FROM python:3.6 AS base
-RUN pip install pipenv
+FROM python:3.6-slim AS base
+RUN apt-get update \
+    && apt-get install -y gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install --no-cache-dir pipenv
 
 ENV APP_HOME=/usr/src/app
 RUN mkdir -p $APP_HOME
