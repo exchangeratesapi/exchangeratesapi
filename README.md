@@ -67,7 +67,9 @@ fetch('https://api.exchangeratesapi.io/latest')
 ```
 
 ## API wrappers
-* PHP - [https://github.com/benmajor/ExchangeRatesAPI](https://github.com/benmajor/ExchangeRatesAPI)
+### PHP 
+  - [https://github.com/benmajor/ExchangeRatesAPI](https://github.com/benmajor/ExchangeRatesAPI)
+  - [`otherguy/php-currency-api`](https://github.com/otherguy/php-currency-api)
 
 ## Stack
 
