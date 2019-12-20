@@ -68,6 +68,7 @@ fetch('https://api.exchangeratesapi.io/latest')
 
 ## API wrappers
 * PHP - [https://github.com/benmajor/ExchangeRatesAPI](https://github.com/benmajor/ExchangeRatesAPI)
+* TypeScript - [https://github.com/ToeFungi/exchange-rates-as-promised](https://github.com/ToeFungi/exchange-rates-as-promised)
 
 ## Stack
 
