@@ -6,7 +6,7 @@ Exchange rates API is a free service for current and historical foreign exchange
 
 ## Usage
 
-#### Lates & specific date rates
+#### Latest & specific date rates
 Get the latest foreign exchange rates.
 
 ```http
