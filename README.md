@@ -68,6 +68,7 @@ fetch('https://api.exchangeratesapi.io/latest')
 
 ## API wrappers
 * PHP - [https://github.com/benmajor/ExchangeRatesAPI](https://github.com/benmajor/ExchangeRatesAPI)
+* Ruby - [https://github.com/maful/vici-exchange-rates](https://github.com/maful/vici-exchange-rates)
 
 ## Stack
 
