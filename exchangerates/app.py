@@ -147,6 +147,9 @@ async def exchange_rates(request, date=None):
                 {"error": "Base '{}' is not supported.".format(base)}, status=400
             )
 
+    else:
+        rates["EUR"] = Decimal(1)
+
     # Symbols
     if "symbols" in request.args:
         symbols = list(
@@ -227,6 +230,9 @@ async def exchange_rates(request):
                 return json(
                     {"error": "Base '{}' is not supported.".format(base)}, status=400
                 )
+
+        else:
+            rates["EUR"] = Decimal(1)
 
         # Symbols
         if "symbols" in request.args:
