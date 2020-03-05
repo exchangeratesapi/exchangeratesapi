@@ -106,6 +106,14 @@ On initialization it will check the database. If it's empty all the historic rat
 gunicorn exchangerates.app:app --worker-class sanic.worker.GunicornWorker --reload
 ```
 
+## Docker
+
+```shell
+docker-compose up
+```
+
+* docker-compose.yml is set-up to run for local development
+
 ## Contributing
 Thanks for your interest in the project! All pull requests are welcome from developers of all skill levels. To get started, simply fork the master branch on GitHub to your personal account and then clone the fork into your development environment.
 

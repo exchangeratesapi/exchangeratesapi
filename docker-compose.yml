@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:11
+    ports:
+      - 5432:5432
+    volumes:
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d    
+  app:
+    build: .
+    command: bash -c "pipenv install --deploy --system && gunicorn exchangerates.app:app --bind 0.0.0.0:8000 --worker-class sanic.worker.GunicornWorker --reload"
+    ports:
+      - 8000:8000
+    volumes:
+      - ".:/usr/src/app"    
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://postgres@db:5432/exchangerates?sslmode=disable
