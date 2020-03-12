@@ -116,11 +116,11 @@ async def exchange_rates(request, date=None):
         try:
             dt = datetime.strptime(date, "%Y-%m-%d")
         except ValueError as e:
-            return json({"error": "{}".format(e)}, status=400)
+            return json({"error": "{}".format(e), "code": "4010"}, status=400)
 
         if dt < datetime(1999, 1, 4):
             return json(
-                {"error": "There is no data for dates older then 1999-01-04."},
+                {"error": "There is no data for dates older then 1999-01-04.", "code": "4001"},
                 status=400,
             )
 
@@ -144,7 +144,7 @@ async def exchange_rates(request, date=None):
             rates["EUR"] = Decimal(1) / base_rate
         else:
             return json(
-                {"error": "Base '{}' is not supported.".format(base)}, status=400
+                {"error": "Base '{}' is not supported.".format(base), "code": "4002"}, status=400
             )
 
     # Symbols
@@ -162,7 +162,7 @@ async def exchange_rates(request, date=None):
                 {
                     "error": "Symbols '{}' are invalid for date {}.".format(
                         ",".join(symbols), dt.date()
-                    )
+                    ), "code": "4003"
                 },
                 status=400,
             )
@@ -184,22 +184,22 @@ async def exchange_rates(request):
             start_at = datetime.strptime(request.raw_args["start_at"], "%Y-%m-%d")
         except ValueError as e:
             return json(
-                {"error": "start_at parameter format", "exception": "{}".format(e)},
+                {"error": "start_at parameter format", "exception": "{}".format(e), "code": "4004"},
                 status=400,
             )
     else:
-        return json({"error": "missing start_at parameter"})
+        return json({"error": "missing start_at parameter", "code": "4006"})
 
     if "end_at" in request.raw_args:
         try:
             end_at = datetime.strptime(request.raw_args["end_at"], "%Y-%m-%d")
         except ValueError as e:
             return json(
-                {"error": "end_at parameter format", "exception": "{}".format(e)},
+                {"error": "end_at parameter format", "exception": "{}".format(e), "code": "4005"},
                 status=400,
             )
     else:
-        return json({"error": "missing end_at parameter"})
+        return json({"error": "missing end_at parameter", "code": "4007"})
 
     exchange_rates = (
         await ExchangeRates.query.where(ExchangeRates.date >= start_at.date())
@@ -225,7 +225,7 @@ async def exchange_rates(request):
                 rates["EUR"] = Decimal(1) / base_rate
             else:
                 return json(
-                    {"error": "Base '{}' is not supported.".format(base)}, status=400
+                    {"error": "Base '{}' is not supported.".format(base), "code": "4008"}, status=400
                 )
 
         # Symbols
@@ -240,7 +240,7 @@ async def exchange_rates(request):
                 rates = {symbol: rates[symbol] for symbol in symbols}
             else:
                 return json(
-                    {"error": "Symbols '{}' are invalid.".format(",".join(symbols))},
+                    {"error": "Symbols '{}' are invalid.".format(",".join(symbols)), "code": "4009"},
                     status=400,
                 )
 

@@ -6,7 +6,7 @@ Exchange rates API is a free service for current and historical foreign exchange
 
 ## Usage
 
-#### Lates & specific date rates
+#### Latest & specific date rates
 Get the latest foreign exchange rates.
 
 ```http
@@ -69,6 +69,7 @@ fetch('https://api.exchangeratesapi.io/latest')
 ## API wrappers
 * PHP - [https://github.com/benmajor/ExchangeRatesAPI](https://github.com/benmajor/ExchangeRatesAPI)
 * Laravel (PHP) - [https://github.com/ash-jc-allen/laravel-exchange-rates](https://github.com/ash-jc-allen/laravel-exchange-rates)
+* TypeScript - [https://github.com/ToeFungi/exchange-rates-as-promised](https://github.com/ToeFungi/exchange-rates-as-promised)
 
 ## Stack
 
