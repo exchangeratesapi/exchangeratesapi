@@ -68,6 +68,7 @@ fetch('https://api.exchangeratesapi.io/latest')
 
 ## API wrappers
 * PHP - [https://github.com/benmajor/ExchangeRatesAPI](https://github.com/benmajor/ExchangeRatesAPI)
+* Laravel (PHP) - [https://github.com/ash-jc-allen/laravel-exchange-rates](https://github.com/ash-jc-allen/laravel-exchange-rates)
 * Ruby - [https://github.com/overchind/ECBExchangeRatesApi](https://github.com/overchind/ECBExchangeRatesApi)
 
 ## Stack
