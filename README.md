@@ -6,7 +6,7 @@ Exchange rates API is a free service for current and historical foreign exchange
 
 ## Usage
 
-#### Lates & specific date rates
+#### Latest & specific date rates
 Get the latest foreign exchange rates.
 
 ```http
@@ -72,7 +72,7 @@ fetch('https://api.exchangeratesapi.io/latest')
 
 ## Stack
 
-Exchange rates API is built upon Sanic to achieve high throughput. The current setup can asyncronously handle thousands of requests per second.
+Exchange rates API is built upon Sanic to achieve high throughput. The current setup can asynchronously handle thousands of requests per second.
 
 #### Libraries used
 * [Sanic](https://github.com/channelcat/sanic)
